@@ -1,6 +1,6 @@
 # Yandex OAuth Token Getter
 
-Простое React приложение для получения Yandex OAuth токена.
+Простое React приложение для получения Yandex OAuth токена. (vibe-coding)
 
 ## Установка
 

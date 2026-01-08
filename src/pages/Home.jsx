@@ -125,12 +125,6 @@ function Home() {
           </button>
         </div>
 
-        {backendUrl && (
-          <div className={styles.backendUrl}>
-            <strong>Backend URL:</strong> <span>{backendUrl}</span>
-          </div>
-        )}
-
         <button onClick={handleAuth} className={styles.button}>
           Авторизоваться через Yandex
         </button>
