@@ -57,17 +57,18 @@ function Home() {
   useEffect(() => {
     const handleMessage = (event) => {
       if (event.data?.type === 'yandex_token' && event.data?.access_token) {
-        if (urlInput.trim()) {
-          sendToBackend(urlInput);
+        if (event.data?.url) {
+          setUrlInput(event.data.url);
+          showStatus('URL получен из окна авторизации', 'success');
         } else {
-          showStatus('Токен получен. Вставьте URL из окна авторизации и нажмите "Отправить"', 'success');
+          showStatus('Токен получен. Введите URL и нажмите "Отправить"', 'success');
         }
       }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [urlInput, sendToBackend, showStatus]);
+  }, [showStatus]);
 
   const handleAuth = () => {
     if (!oauthUrl) {
@@ -88,10 +89,11 @@ function Home() {
       return;
     }
 
-    showStatus('Окно авторизации открыто. После авторизации скопируйте URL из адресной строки открывшегося окна.', 'info');
+    showStatus('Окно авторизации открыто. После авторизации URL будет автоматически заполнен.', 'info');
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     sendToBackend(urlInput);
   };
 
@@ -102,7 +104,7 @@ function Home() {
         
         <div className={styles.instructions}>
           <strong>Инструкция:</strong> Нажмите кнопку ниже, чтобы открыть окно авторизации Yandex. 
-          После авторизации скопируйте URL из адресной строки открывшегося окна и вставьте его ниже.
+          После авторизации URL будет автоматически заполнен в поле ниже. Затем нажмите "Отправить".
         </div>
 
         {!hgramid && (
@@ -111,20 +113,24 @@ function Home() {
           </div>
         )}
 
-        <div className={styles.inputSection}>
-          <input
-            type="text"
-            value={urlInput}
-            onChange={(e) => setUrlInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
-            placeholder="Вставьте URL сюда"
-            className={styles.input}
-          />
-        </div>
-
         <button onClick={handleAuth} className={styles.button}>
           Авторизоваться через Yandex
         </button>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.inputSection}>
+            <input
+              type="text"
+              value={urlInput}
+              onChange={(e) => setUrlInput(e.target.value)}
+              placeholder="Вставьте URL сюда"
+              className={styles.input}
+            />
+            <button type="submit" className={styles.button}>
+              Отправить
+            </button>
+          </div>
+        </form>
 
         {status.message && (
           <div className={`${styles.status} ${styles[status.type]}`}>
