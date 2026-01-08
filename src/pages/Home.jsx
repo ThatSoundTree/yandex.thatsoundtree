@@ -120,9 +120,6 @@ function Home() {
             placeholder="Вставьте URL сюда"
             className={styles.input}
           />
-          <button onClick={handleSubmit} className={styles.button}>
-            Отправить
-          </button>
         </div>
 
         <button onClick={handleAuth} className={styles.button}>
